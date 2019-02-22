@@ -3,7 +3,7 @@
 #include <string.h>
 #include <netdb.h>
 #include <stdlib.h>
- 
+#include <regex>
  
 using namespace std;
  
@@ -70,8 +70,8 @@ string getpagecontent(const string url)
     string requestHeader;
     requestHeader   = "GET " + PagePath + " HTTP/1.1\r\n";
     requestHeader += "Host: " + HostUrl + "\r\n";
-    requestHeader += "Accept: */*\r\n";
-    requestHeader += "User-Agent: Mozilla/4.0(compatible)\r\n";
+    requestHeader += "Accept: */*\r\n";Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36u:q!
+    requestHeader += "User-Agent: \r\n";
     requestHeader += "connection:Keep-Alive\r\n";
     requestHeader += "\r\n";
  
@@ -122,10 +122,23 @@ string getpagecontent(const string url)
  
     return pagecontent;
 }
- 
-int main()
+vector<string> getProfileIDArray(string str){
+    vector<string> vec;
+    regex reg("\\d{1,10}-profile");
+    sregex_iterator ite(str.begin(), str.end(), reg);
+    sregex_iterator end;
+    for(; ite != end; ++ite)
+    {
+        cout << ite->str() << endl;
+        vec.push_back(ite->str);
+    }
+    return vec;
+}
+int main(int argc, char**argv)
 {
-    cout<<getpagecontent("http://www.baidu.com")<<endl;
+    
+    string responseStr = getpagecontent(argv[1])<<endl;
+    getProfileIDArray(responseStr);
  
     return 0;
 }
