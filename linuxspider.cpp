@@ -3,8 +3,8 @@
 #include <string.h>
 #include <netdb.h>
 #include <stdlib.h>
-#include <regex>
- 
+#include <regex.h>
+#include <vector>
 using namespace std;
  
 #define ERROR    -1
@@ -70,8 +70,8 @@ string getpagecontent(const string url)
     string requestHeader;
     requestHeader   = "GET " + PagePath + " HTTP/1.1\r\n";
     requestHeader += "Host: " + HostUrl + "\r\n";
-    requestHeader += "Accept: */*\r\n";Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36u:q!
-    requestHeader += "User-Agent: \r\n";
+    requestHeader += "Accept: */*\r\n";
+   requestHeader += "User-Agent: Mozilla/4.0(compatible)\r\n";
     requestHeader += "connection:Keep-Alive\r\n";
     requestHeader += "\r\n";
  
