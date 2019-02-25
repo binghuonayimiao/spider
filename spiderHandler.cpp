@@ -129,10 +129,7 @@ vector<string> getRegularResult(string &str, regex &reg){
     }
     return vec;
 }
-void getResponseInfo(vector<string> &profileIDVec){
-     for(auto ite: profileIDVec){
-            cout<<ite<<endl;
-        }
+void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis){
     if(profileIDVec.empty()){
         cout<<"funName = getInfo, profileIDVec is empty"<<endl;
         return;
@@ -141,7 +138,7 @@ void getResponseInfo(vector<string> &profileIDVec){
     for(auto &ite: profileIDVec){
         string url = baseUrl + ite;
         string responseStr = getpagecontent(url);
-        //cout<<responseStr<<endl;
+        cout<<ite<<endl;
         regex nameRegxTemp("main\"><strong>[\u4e00-\u9fa5a-zA-Z0-9]{1,100}</strong><span><a href");
         vector<string> nameVecTemp = getRegularResult(responseStr, nameRegxTemp);
         if(!nameVecTemp.empty()){
@@ -149,8 +146,8 @@ void getResponseInfo(vector<string> &profileIDVec){
             vector<string> nameVec = getRegularResult(nameVecTemp[0], nameRegx);
 
             if(!nameVec.empty()){
-                cout<<"size= "<<nameVec.size()<<endl;
-                cout<<"name= "<< nameVec[0]<<endl;
+                    redis.setString(ite, nameVec[0]);
+					cout<<"name= "<< nameVec[0]<<endl;
             }else{
                 cout<<"funName = getResponseInfo, nameVec is empty"<<endl;
             }

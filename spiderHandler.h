@@ -8,13 +8,14 @@
 #include <stdlib.h>
 #include <regex>
 #include <vector>
+#include "redis.h"
 #include <unistd.h>
 using namespace std;
 extern int socketFd;
 
 void GetUrlAndPath(const string url, string &HostUrl, string &PagePath);
 void setSocketFd(const string url);
-void getResponseInfo(vector<string> &profileIDVec);
+void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis);
 void setProfileIDVec(vector<string> &profileIDVec, string &baseUrl);
 string getpagecontent(const string url);
 vector<string> getRegularResult(string &str, regex &reg);
