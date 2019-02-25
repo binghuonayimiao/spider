@@ -8,18 +8,34 @@ SET(CMAKE_C_COMPILER "/usr/local/bin/gcc")
 SET(CMAKE_CXX_COMPILER "/usr/local/bin/g++")
 add_definitions(-std=c++11)
 
+#设置执行文件输出目录
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
+#设置库输出路径
+SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
+MESSAGE("++++++++++++++Start Build+++++++++++++++++")
+
 # 查找当前目录下的所有源文件
 # 并将名称保存到 DIR_SRCS 变量
 aux_source_directory(. DIR_SRCS)
 
+# 添加头文件路径
+include_directories("${PROJECT_SOURCE_DIR}/redis ${PROJECT_SOURCE_DIR}/src")
+
+# 添加文件子目录 
+#不可以合并
+add_subdirectory(./redis)
+add_subdirectory(./src)
+
 # 添加第三方的库
-set(INC_DIR /usr/local/include/)
-set(LINK_DIR /usr/local/lib)
+#set(INC_DIR /usr/local/include/ ./redis ./src)
+#set(LINK_DIR /usr/local/lib)
+set(INC_DIR  ./redis ./src)
 
 include_directories(${INC_DIR})
 link_directories(${LINK_DIR})
-link_libraries(hiredis)
-link_libraries(json_linux-gcc-4.9.3_libmt)
+link_libraries(hiredis json_linux-gcc-4.9.3_libmt)
 
 
 
@@ -27,5 +43,4 @@ link_libraries(json_linux-gcc-4.9.3_libmt)
 add_executable(app ${DIR_SRCS})
 
 # 将第三方的库链接到可执行文件
-target_link_libraries(app hiredis)
-target_link_libraries(app json_linux-gcc-4.9.3_libmt.a)
+target_link_libraries(app hiredis json_linux-gcc-4.9.3_libmt.a MyRedis MySrc)

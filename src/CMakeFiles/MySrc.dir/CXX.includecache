@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/root/spider/zgs_test/redis/redis.h
+redisConf.h
+/root/spider/zgs_test/redis/redisConf.h
+hiredis/hiredis.h
+-
+
+/root/spider/zgs_test/redis/redisConf.h
+string
+-
+
+/root/spider/zgs_test/src/spiderHandler.cpp
+spiderHandler.h
+/root/spider/zgs_test/src/spiderHandler.h
+
+/root/spider/zgs_test/src/spiderHandler.h
+iostream
+-
+string
+-
+string.h
+-
+netdb.h
+-
+stdlib.h
+-
+regex
+-
+vector
+-
+../redis/redis.h
+/root/spider/zgs_test/redis/redis.h
+unistd.h
+-
+

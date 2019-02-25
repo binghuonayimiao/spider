@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libMyRedis.a  CMakeFiles/MyRedis.dir/redis.cc.o CMakeFiles/MyRedis.dir/redisConf.cc.o
+/usr/bin/ranlib ../../lib/libMyRedis.a

@@ -1,0 +1,1 @@
+/usr/local/bin/g++    -rdynamic CMakeFiles/app.dir/main.cpp.o  -o ../bin/app -lhiredis -ljson_linux-gcc-4.9.3_libmt -lhiredis -Wl,-Bstatic -ljson_linux-gcc-4.9.3_libmt ../lib/libMyRedis.a ../lib/libMySrc.a -Wl,-Bdynamic -ljson_linux-gcc-4.9.3_libmt -Wl,-Bstatic -ljson_linux-gcc-4.9.3_libmt -Wl,-Bdynamic 

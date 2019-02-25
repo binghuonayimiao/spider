@@ -1,0 +1,9 @@
+/root/spider/zgs_test/build/CMakeFiles/rebuild_cache.dir
+/root/spider/zgs_test/build/CMakeFiles/edit_cache.dir
+/root/spider/zgs_test/build/CMakeFiles/app.dir
+/root/spider/zgs_test/build/redis/CMakeFiles/rebuild_cache.dir
+/root/spider/zgs_test/build/redis/CMakeFiles/edit_cache.dir
+/root/spider/zgs_test/build/redis/CMakeFiles/MyRedis.dir
+/root/spider/zgs_test/build/src/CMakeFiles/rebuild_cache.dir
+/root/spider/zgs_test/build/src/CMakeFiles/edit_cache.dir
+/root/spider/zgs_test/build/src/CMakeFiles/MySrc.dir
