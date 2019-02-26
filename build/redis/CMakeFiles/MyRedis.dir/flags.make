@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=c++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/root/spider/zgs_test/redis /root/spider/zgs_test/src" 
+CXX_INCLUDES = 
 

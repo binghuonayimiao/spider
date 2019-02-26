@@ -81,6 +81,8 @@ app_EXTERNAL_OBJECTS =
 ../bin/app: CMakeFiles/app.dir/build.make
 ../bin/app: ../lib/libMyRedis.a
 ../bin/app: ../lib/libMySrc.a
+../bin/app: ../lib/libMyRedis.a
+../bin/app: ../lib/libMySrc.a
 ../bin/app: CMakeFiles/app.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/root/spider/zgs_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ../bin/app"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/app.dir/link.txt --verbose=$(VERBOSE)

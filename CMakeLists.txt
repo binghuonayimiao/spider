@@ -20,22 +20,18 @@ MESSAGE("++++++++++++++Start Build+++++++++++++++++")
 # 并将名称保存到 DIR_SRCS 变量
 aux_source_directory(. DIR_SRCS)
 
-# 添加头文件路径
-include_directories("${PROJECT_SOURCE_DIR}/redis ${PROJECT_SOURCE_DIR}/src")
-
 # 添加文件子目录 
 #不可以合并
-add_subdirectory(./redis)
+add_subdirectory(${PROJECT_SOURCE_DIR}/redis)
 add_subdirectory(./src)
 
 # 添加第三方的库
-#set(INC_DIR /usr/local/include/ ./redis ./src)
-#set(LINK_DIR /usr/local/lib)
-set(INC_DIR  ./redis ./src)
+set(LINK_DIR ${PROJECT_SOURCE_DIR}/lib)
+set(INC_DIR  ${PROJECT_SOURCE_DIR}/redis ${PROJECT_SOURCE_DIR}/src)
 
 include_directories(${INC_DIR})
 link_directories(${LINK_DIR})
-link_libraries(hiredis json_linux-gcc-4.9.3_libmt)
+link_libraries(hiredis json_linux-gcc-4.9.3_libmt MyRedis MySrc)
 
 
 
