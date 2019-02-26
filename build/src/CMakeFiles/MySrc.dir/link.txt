@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libMySrc.a  CMakeFiles/MySrc.dir/spiderHandler.cpp.o
-/usr/bin/ranlib ../../lib/libMySrc.a

@@ -146,7 +146,7 @@ void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis){
             vector<string> nameVec = getRegularResult(nameVecTemp[0], nameRegx);
 
             if(!nameVec.empty()){
-                    redis.setString(ite, nameVec[0]);
+                    redis.setString("zgs_test", nameVec[0]);
 					cout<<"name= "<< nameVec[0]<<endl;
             }else{
                 cout<<"funName = getResponseInfo, nameVec is empty"<<endl;
@@ -161,7 +161,7 @@ void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis){
 }
 void setProfileIDVec(vector<string> &profileIDVec, string &baseUrl){
     //爬取100页信息
-    for(int i = 1; i < 20; i++){
+    for(int i = 1; i < 10; i++){
         string url = baseUrl + "p" + to_string(i) +"/";
         string responseStr = getpagecontent(url);
         regex reg("\\d{1,10}-profile");

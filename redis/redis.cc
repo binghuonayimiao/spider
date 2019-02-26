@@ -14,7 +14,7 @@ using std::stringstream;
 
 #define SETSTRING(key, value) \
     stringstream ss;\
-    ss << "SET " << key << " " << value;\
+    ss << "SADD " << key << " " << value;\
     string s;\
     getline(ss, s);\
     setString(s);
