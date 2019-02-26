@@ -1,6 +1,17 @@
 #include "spiderHandler.h"
 
-int socketFd;
+
+void task(string url){
+    ccx::Redis redis;
+    redis.Connect();
+
+    int socketFd = getSocketFd(url);
+    vector<string> profileIDVec;
+    setProfileIDVec(profileIDVec, url, socketFd);
+    getInfoAndWriteToRedis(profileIDVec, redis, socketFd);
+
+    redis.disConnect();
+}
 void GetUrlAndPath(const string url, string &HostUrl, string &PagePath)
 {
     HostUrl = url;
@@ -27,7 +38,7 @@ void GetUrlAndPath(const string url, string &HostUrl, string &PagePath)
         HostUrl = HostUrl.substr(0, pos);
     }
 }
-void setSocketFd(const string url){
+int getSocketFd(const string url){
     //记录主机的信息，包括主机名、别名、地址类型、地址长度和地址列表
     struct hostent *host;
     string HostUrl, PagePath;
@@ -48,7 +59,7 @@ void setSocketFd(const string url){
     addr.sin_family = AF_INET;
     addr.sin_port = htons(80);
     addr.sin_addr.s_addr = ((struct in_addr*) (host->h_addr))->s_addr;
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+    int socketFd = socket(AF_INET, SOCK_STREAM, 0);
     if(socketFd == -1)
     {
         cout<<"create socketFd error"<<endl;
@@ -60,8 +71,9 @@ void setSocketFd(const string url){
         cout<<"connect error"<<endl;
         exit(1);
     }
+    return socketFd;
 }
-string getpagecontent(const string url)
+string getpagecontent(const string url, int &socketFd)
 {
     //记录主机的信息，包括主机名、别名、地址类型、地址长度和地址列表
     struct hostent *host;
@@ -129,15 +141,19 @@ vector<string> getRegularResult(string &str, regex &reg){
     }
     return vec;
 }
-void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis){
+void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis, int &socketFd){
     if(profileIDVec.empty()){
         cout<<"funName = getInfo, profileIDVec is empty"<<endl;
         return;
     }
+    std::ostringstream oss;
+	oss << std::this_thread::get_id();
+	std::string stid = oss.str();
+
     string baseUrl = "http://www.youyuan.com/";
     for(auto &ite: profileIDVec){
         string url = baseUrl + ite;
-        string responseStr = getpagecontent(url);
+        string responseStr = getpagecontent(url, socketFd);
         cout<<ite<<endl;
         regex nameRegxTemp("main\"><strong>[\u4e00-\u9fa5a-zA-Z0-9]{1,100}</strong><span><a href");
         vector<string> nameVecTemp = getRegularResult(responseStr, nameRegxTemp);
@@ -146,7 +162,8 @@ void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis){
             vector<string> nameVec = getRegularResult(nameVecTemp[0], nameRegx);
 
             if(!nameVec.empty()){
-                    redis.setString("zgs_test", nameVec[0]);
+                    std::string value = nameVec[0] + stid;
+                    redis.setString("zgs_set", value);
 					cout<<"name= "<< nameVec[0]<<endl;
             }else{
                 cout<<"funName = getResponseInfo, nameVec is empty"<<endl;
@@ -159,11 +176,11 @@ void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis){
     }
 
 }
-void setProfileIDVec(vector<string> &profileIDVec, string &baseUrl){
+void setProfileIDVec(vector<string> &profileIDVec, string &baseUrl, int &socketFd){
     //爬取100页信息
     for(int i = 1; i < 10; i++){
         string url = baseUrl + "p" + to_string(i) +"/";
-        string responseStr = getpagecontent(url);
+        string responseStr = getpagecontent(url, socketFd);
         regex reg("\\d{1,10}-profile");
         vector<string> profileIDVecTemp = getRegularResult(responseStr, reg);
         cout<<"profileIDVecTemp.size= "<< profileIDVecTemp.size()<<endl;

@@ -10,13 +10,14 @@
 #include <vector>
 #include "../redis/redis.h"
 #include <unistd.h>
+#include <thread>
 using namespace std;
-extern int socketFd;
 
 void GetUrlAndPath(const string url, string &HostUrl, string &PagePath);
-void setSocketFd(const string url);
-void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis);
-void setProfileIDVec(vector<string> &profileIDVec, string &baseUrl);
-string getpagecontent(const string url);
+void task(string url);
+int  getSocketFd(const string url);
+void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis, int &socketFd);
+void setProfileIDVec(vector<string> &profileIDVec, string &baseUrl, int &socketFd);
+string getpagecontent(const string url, int &socketFd);
 vector<string> getRegularResult(string &str, regex &reg);
 #endif
