@@ -18,6 +18,14 @@ using std::stringstream;
     string s;\
     getline(ss, s);\
     setString(s);
+
+#define SETHASH(key, member, value) \
+    stringstream ss;\
+    ss << "HSET " << key << " " << member << " " << value;\
+    string s;\
+    getline(ss, s);\
+    setString(s);
+
 Redis::Redis()
 : _conf(),_reply(NULL)
 {
@@ -54,6 +62,9 @@ void Redis::setString(const string & data)
     }
 }
 
+void Redis::setHash(const string & key, const string & member, const string & value){
+    SETHASH(key, member, value);
+}
 void Redis::setString(const string & key, const string & value)
 {
     SETSTRING(key, value);
@@ -75,6 +86,21 @@ void Redis::getString(const string & key)
 {
     freeReply();
     _reply = (redisReply*)::redisCommand(_context, "GET %s", key.c_str());
+}
+
+bool Redis::isHashMember(const string & key, const string & member)
+{
+
+	freeReply();
+    string s = "hexists " + key + " " + member;
+    _reply = (redisReply*)::redisCommand(_context, s.c_str());
+	
+    int res = 0;
+    if(!isError() && _reply->type == REDIS_REPLY_INTEGER)
+    {
+        res = (int)(_reply->integer);
+    }
+    return 1==res ? true:false;
 }
 
 void Redis::getString(const string & key, string & value)

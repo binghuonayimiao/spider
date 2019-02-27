@@ -19,6 +19,8 @@ class Redis
         void setString(const string & key, const string & value);
         void setString(const string & key, const int & value);
         void setString(const string & key, const float & value);
+        void setHash(const string & key, const string & member, const string & value);
+        bool isHashMember(const string & key, const string & member);
     private:
         void setString(const string & data);
     public:

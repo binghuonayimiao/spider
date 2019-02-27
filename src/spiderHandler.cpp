@@ -151,10 +151,11 @@ void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis, int
 	std::string stid = oss.str();
 
     string baseUrl = "http://www.youyuan.com/";
-    for(auto &ite: profileIDVec){
-        string url = baseUrl + ite;
+    for(int i = 0; i < (int)profileIDVec.size(); i++){
+        string url = baseUrl + profileIDVec[i];
+        sleep(1); //睡1s,体现出多线程的优势
         string responseStr = getpagecontent(url, socketFd);
-        cout<<ite<<endl;
+        cout<<profileIDVec[i]<<endl;
         regex nameRegxTemp("main\"><strong>[\u4e00-\u9fa5a-zA-Z0-9]{1,100}</strong><span><a href");
         vector<string> nameVecTemp = getRegularResult(responseStr, nameRegxTemp);
         if(!nameVecTemp.empty()){
@@ -162,9 +163,19 @@ void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis, int
             vector<string> nameVec = getRegularResult(nameVecTemp[0], nameRegx);
 
             if(!nameVec.empty()){
-                    std::string value = nameVec[0] + stid;
-                    redis.setString("zgs_set", value);
-					cout<<"name= "<< nameVec[0]<<endl;
+					if(0 == i){
+                        redis.setHash("zgs_hash", nameVec[0], stid);
+                    }
+                    //判断该键在hash中有没有存储过，有则证明其它线程已经爬出过，本线程顺延10个继续爬取
+                    if(! redis.isHashMember("zgs_hash", nameVec[0])){
+                        redis.setHash("zgs_hash", nameVec[0], stid);
+                        cout<<"name= "<< nameVec[0]<< "stid= " << stid <<endl;
+                    }else{
+						cout<<nameVec[0]<<"is exists"<<endl;
+                        i += 10;
+                    }
+                    
+					
             }else{
                 cout<<"funName = getResponseInfo, nameVec is empty"<<endl;
             }
@@ -183,7 +194,6 @@ void setProfileIDVec(vector<string> &profileIDVec, string &baseUrl, int &socketF
         string responseStr = getpagecontent(url, socketFd);
         regex reg("\\d{1,10}-profile");
         vector<string> profileIDVecTemp = getRegularResult(responseStr, reg);
-        cout<<"profileIDVecTemp.size= "<< profileIDVecTemp.size()<<endl;
         profileIDVec.insert(profileIDVec.end(), profileIDVecTemp.begin(), profileIDVecTemp.end());
     }
     
