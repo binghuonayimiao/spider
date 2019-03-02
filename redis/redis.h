@@ -4,9 +4,10 @@
 #include "redisConf.h"
 
 #include "../thirdparty/hiredis/hiredis.h"
-
+#include "../src/MyLog.h"
 
 namespace ccx{
+using std::string;
 
 class Redis
 {

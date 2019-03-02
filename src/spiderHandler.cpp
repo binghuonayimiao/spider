@@ -1,5 +1,8 @@
 #include "spiderHandler.h"
 
+void init(){
+    
+}
 
 void task(string url){
     ccx::Redis redis;
@@ -194,11 +197,12 @@ void setProfileIDVec(vector<string> &profileIDVec, string &baseUrl, int &socketF
         string responseStr = getpagecontent(url, socketFd);
         regex reg("\\d{1,10}-profile");
         vector<string> profileIDVecTemp = getRegularResult(responseStr, reg);
+		LOG_DEBUG<<"profileIDVecTemp size is"<<profileIDVecTemp.size();
         profileIDVec.insert(profileIDVec.end(), profileIDVecTemp.begin(), profileIDVecTemp.end());
     }
     
     //profileID正则匹配两个，去重处理
     profileIDVec.erase(unique(profileIDVec.begin(), profileIDVec.end()), profileIDVec.end());
-    cout<<"profileIDVec.size= "<< profileIDVec.size()<<endl;
+    LOG_DEBUG<<"profileIDVec size is"<<profileIDVec.size();
 
 }

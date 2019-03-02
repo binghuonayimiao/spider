@@ -22,8 +22,9 @@ void RedisConf::getConf()
     ifs.open("../redis/redisConf.json");
     if(!ifs.good())
     {
-        cout << "open RedisConf.json error" << endl;
-        exit(EXIT_FAILURE);
+        //cout << "open RedisConf.json error" << endl;
+        //exit(EXIT_FAILURE);
+        ifs.open("./redis/redisConf.json");
     }
 
     Json::Value root;

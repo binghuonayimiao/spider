@@ -8,11 +8,14 @@
 #include <stdlib.h>
 #include <regex>
 #include <vector>
-#include "../redis/redis.h"
 #include <unistd.h>
 #include <thread>
+#include "../redis/redis.h"
+#include "MyLog.h"
 using namespace std;
 
+
+void init();
 void GetUrlAndPath(const string url, string &HostUrl, string &PagePath);
 void task(string url);
 int  getSocketFd(const string url);

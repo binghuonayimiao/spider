@@ -11,6 +11,7 @@ namespace ccx{
 using std::cout;
 using std::endl;
 using std::stringstream;
+using std::string;
 
 #define SETSTRING(key, value) \
     stringstream ss;\
@@ -27,7 +28,7 @@ using std::stringstream;
     setString(s);
 
 Redis::Redis()
-: _conf(),_reply(NULL)
+: _conf(),_reply(NULL),_context(NULL)
 {
 }
 
