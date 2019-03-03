@@ -53,7 +53,7 @@ int getSocketFd(const string url){
     host = gethostbyname(HostUrl.c_str());
     if(host == 0)
     {
-        cout<<"gethostbyname error";
+        LOG_DEBUG<<"gethostbyname error";
         exit(1);
     }
 
@@ -65,13 +65,13 @@ int getSocketFd(const string url){
     int socketFd = socket(AF_INET, SOCK_STREAM, 0);
     if(socketFd == -1)
     {
-        cout<<"create socketFd error"<<endl;
+        LOG_DEBUG<<"create socketFd error";
         exit(1);
     }
     int ret = connect(socketFd, (const sockaddr*)&addr, sizeof(addr));
     if(ret == -1)
     {
-        cout<<"connect error"<<endl;
+        LOG_DEBUG<<"connect error";
         exit(1);
     }
     return socketFd;
@@ -96,7 +96,7 @@ string getpagecontent(const string url, int &socketFd)
     int ret = send(socketFd, requestHeader.c_str(), requestHeader.size(), 0);
     if(ret == -1)
     {
-        cout<<"send error"<<endl;
+        LOG_DEBUG<<"send error";
         exit(1);
     }
  
@@ -146,7 +146,7 @@ vector<string> getRegularResult(string &str, regex &reg){
 }
 void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis, int &socketFd){
     if(profileIDVec.empty()){
-        cout<<"funName = getInfo, profileIDVec is empty"<<endl;
+        LOG_DEBUG<<"funName = getInfo, profileIDVec is empty";
         return;
     }
     std::ostringstream oss;
@@ -158,7 +158,7 @@ void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis, int
         string url = baseUrl + profileIDVec[i];
         sleep(1); //睡1s,体现出多线程的优势
         string responseStr = getpagecontent(url, socketFd);
-        cout<<profileIDVec[i]<<endl;
+        LOG_DEBUG<<"ID= "<<profileIDVec[i];
         regex nameRegxTemp("main\"><strong>[\u4e00-\u9fa5a-zA-Z0-9]{1,100}</strong><span><a href");
         vector<string> nameVecTemp = getRegularResult(responseStr, nameRegxTemp);
         if(!nameVecTemp.empty()){
@@ -172,19 +172,19 @@ void getInfoAndWriteToRedis(vector<string> &profileIDVec, ccx::Redis &redis, int
                     //判断该键在hash中有没有存储过，有则证明其它线程已经爬出过，本线程顺延10个继续爬取
                     if(! redis.isHashMember("zgs_hash", nameVec[0])){
                         redis.setHash("zgs_hash", nameVec[0], stid);
-                        cout<<"name= "<< nameVec[0]<< "stid= " << stid <<endl;
+                        LOG_DEBUG<<"name= "<< nameVec[0]<< "stid= " << stid;
                     }else{
-						cout<<nameVec[0]<<"is exists"<<endl;
+						LOG_DEBUG<<nameVec[0]<<"is exists";
                         i += 10;
                     }
                     
 					
             }else{
-                cout<<"funName = getResponseInfo, nameVec is empty"<<endl;
+                LOG_DEBUG<<"funName = getResponseInfo, nameVec is empty";
             }
 
         }else{
-            cout<<"funName = getResponseInfo, nameVecTemp is empty"<<endl;
+            LOG_DEBUG<<"funName = getResponseInfo, nameVecTemp is empty";
         }
         
     }

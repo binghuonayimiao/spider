@@ -35,19 +35,19 @@ Redis::Redis()
 void Redis::Connect()
 {
     _context = ::redisConnect(_conf.getIP().c_str(), _conf.getPort());
-    cout << _conf.getIP() << "-" << _conf.getPort() << endl;
+    LOG_DEBUG<< _conf.getIP() << "-" << _conf.getPort();
     if(_context && _context->err)
     {
-        cout << "connect redis error" << endl;
+        LOG_DEBUG << "connect redis error";
         exit(EXIT_FAILURE);    
     }
-    cout << "redis Connect success" << endl;
+    LOG_DEBUG << "redis Connect success";
 }
 
 void Redis::disConnect()
 {
     ::redisFree(_context);
-    cout << "redis disConnect success" << endl;
+    LOG_DEBUG << "redis disConnect success";
 }
 
 void Redis::setString(const string & data)
@@ -58,7 +58,7 @@ void Redis::setString(const string & data)
     {
         if (!(_reply->type == REDIS_REPLY_STATUS && strcasecmp(_reply->str,"OK") == 0))
         {
-            cout << "Failed to execute SET(string)" << endl;
+            LOG_DEBUG << "Failed to execute SET(string)";
         }    
     }
 }

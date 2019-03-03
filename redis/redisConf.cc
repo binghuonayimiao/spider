@@ -31,7 +31,7 @@ void RedisConf::getConf()
     Json::Reader reader;
     if(!reader.parse(ifs, root, false))
     {
-        cout << "RedisConf json reader error" << endl;
+        LOG_DEBUG << "RedisConf json reader error";
         exit(EXIT_FAILURE);
     }
     
